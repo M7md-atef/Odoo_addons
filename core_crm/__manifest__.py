@@ -8,7 +8,7 @@
     'author': "My Company",
 
     'category': 'Sales/CRM',
-    'version': '2.2',
+    'version': '2.3',
 
     'depends': ['base'],
 

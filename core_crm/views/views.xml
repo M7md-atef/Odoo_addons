@@ -6,10 +6,8 @@
             <!-- The list is the first screen users see when opening Leads. -->
             <list>
                 <field name="title"/>
-                <field name="company"/>
                 <field name="name"/>
                 <field name="email_id"/>
-                <field name="phone_country_code" width="40px"/>
                 <field name="phone"/>
                 <field name="tag_ids" widget="lead_color_tags"/>
                 <field name="priority" widget="priority"/>
@@ -38,7 +36,6 @@
                         <group>
                             <field name="lead_owner"/>
                             <field name="state" string="Status *"/>
-                            <field name="company" placeholder="Type a company name"/>
                             <field name="priority" widget="priority"/>
                             <field name="revenue" widget="monetary"/>
                             <field name="currency_id" domain="[('name', '=', 'EGP')]" readonly="1"/>

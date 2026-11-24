@@ -216,12 +216,6 @@ class CrmLead(models.Model):
         help="Displays the selected country's flag.",
     )
 
-    # Link to an existing Odoo contact/company; keep the text name for unlisted companies.
-    company = fields.Many2one(
-        "res.partner",
-        string="Company",
-        help="Search for and select an existing company or contact.",
-    )
     language = fields.Many2one(
         "res.lang",
         string="Print Language",
