@@ -1,6 +1,7 @@
 <!-- A top-level menu makes this addon available from the Odoo app menu. -->
 <odoo>
     <menuitem id="menu_core_crm_root" name="CRM" sequence="10"/>
+    <menuitem id="menu_core_crm_pipeline" name="Pipeline" parent="menu_core_crm_root" action="action_core_crm_pipeline" sequence="5"/>
     <menuitem id="menu_core_crm_leads" name="Leads" parent="menu_core_crm_root" action="action_core_crm_leads" sequence="10"/>
-    <menuitem id="menu_core_crm_tags" name="Lead Tags" parent="menu_core_crm_root" action="action_core_crm_tags" sequence="20"/>
+    <menuitem id="menu_core_crm_tags" name="Tags" parent="menu_core_crm_root" action="action_core_crm_tags" sequence="20"/>
 </odoo>

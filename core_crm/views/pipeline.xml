@@ -1,0 +1,173 @@
+<odoo>
+    <!-- Seed the default columns once-->
+    <data noupdate="1">
+        <record id="core_crm_stage_new" model="core.crm.stage">
+            <field name="name">New</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="core_crm_stage_qualified" model="core.crm.stage">
+            <field name="name">Qualified</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="core_crm_stage_lost" model="core.crm.stage">
+            <field name="name">Lost</field>
+            <field name="sequence">30</field>
+        </record>
+    </data>
+
+    <!-- Leads are grouped by stage;the stage's fold field controls collapsed columns. -->
+    <record id="view_core_crm_lead_kanban" model="ir.ui.view">
+        <field name="name">core.crm.lead.kanban</field>
+        <field name="model">core.crm.lead</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id" class="o_kanban_small_column" group_create="true" group_edit="true" group_delete="true" fold_field="fold">
+                <field name="title"/>
+                <field name="stage_id"/>
+                <field name="phone"/>
+                <field name="email_id"/>
+                <field name="lead_owner"/>
+                <field name="priority"/>
+                <field name="revenue"/>
+                <field name="currency_id"/>
+                <field name="tag_ids"/>
+                <field name="whatsapp_no"/>
+                <field name="website"/>
+                <!-- Show each stage's total revenue in its header. -->
+                <progressbar field="priority" colors='{"0": "primary", "1": "primary", "2": "primary", "3": "primary", "4": "primary", "5": "primary"}' sum_field="revenue"/>
+                <templates>
+                    <t t-name="card">
+                        <!-- Contact links are shown only when the lead has matching details. -->
+                        <div class="oe_kanban_card">
+                            <div class="fw-bolder"><field name="title"/></div>
+                            <div t-if="record.revenue.value" class="fw-semibold mt-1">
+                                <field name="revenue" widget="monetary"/>
+                            </div>
+                            <div t-if="record.name.value" class="fw-normal mb-1">
+                                <field name="name"/>
+                            </div>
+                            <div>
+                                <field name="tag_ids" widget="lead_color_tags"/>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-1">
+                                <field name="priority" widget="priority"/>
+                                <div class="d-flex align-items-center gap-2 ms-2">
+                                <a
+                                    t-if="record.phone.value"
+                                    t-att-href="'tel:' + record.phone.value"
+                                    title="Call lead"
+                                    aria-label="Call lead"
+                                >
+                                    <i class="oi oi-fw oi-filled" data-icon="phone"/>
+                                </a>
+                                <a
+                                    t-if="record.email_id.value"
+                                    t-att-href="'mailto:' + record.email_id.value"
+                                    title="Email lead"
+                                    aria-label="Email lead"
+                                >
+                                    <i class="oi oi-fw oi-filled" data-icon="mail"/>
+                                </a>
+                                <a
+                                    t-if="record.whatsapp_no.value"
+                                    t-att-href="'https://wa.me/' + record.whatsapp_no.value"
+                                    title="WhatsApp"
+                                    aria-label="WhatsApp"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <i class="oi oi-fw oi-filled" data-icon="oi_whatsapp"/>
+                                </a>
+                                <a
+                                    t-if="record.website.value"
+                                    t-att-href="record.website.value"
+                                    title="Website"
+                                    aria-label="Website"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <i class="oi oi-fw oi-filled" data-icon="link"/>
+                                </a>
+                                </div>
+                                <div t-if="record.lead_owner.value" class="ms-auto">
+                                    <img
+                                        class="o_avatar rounded-0"
+                                        width="25"
+                                        height="25"
+                                        t-att-src="'/web/image/res.users/' + record.lead_owner.raw_value + '/avatar_128'"
+                                        t-att-alt="record.lead_owner.value"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Analytics views summarize revenue by stage and owner. -->
+    <record id="view_core_crm_lead_pivot" model="ir.ui.view">
+        <field name="name">core.crm.lead.pivot</field>
+        <field name="model">core.crm.lead</field>
+        <field name="arch" type="xml">
+            <pivot string="Pipeline Analysis">
+                <field name="stage_id" type="row"/>
+                <field name="lead_owner" type="col"/>
+                <field name="revenue" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Graph view shows revenue by stage in a bar chart. -->
+    <record id="view_core_crm_lead_graph" model="ir.ui.view">
+        <field name="name">core.crm.lead.graph</field>
+        <field name="model">core.crm.lead</field>
+        <field name="arch" type="xml">
+            <graph string="Pipeline Revenue" type="bar">
+                <field name="stage_id"/>
+                <field name="revenue" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- List view shows all lead details in a table. -->
+    <record id="action_core_crm_pipeline" model="ir.actions.act_window">
+        <field name="name">Pipeline</field>
+        <field name="res_model">core.crm.lead</field>
+        <field name="view_mode">kanban,pivot,graph,list,form</field>
+        <field name="view_id" ref="view_core_crm_lead_kanban"/>
+    </record>
+
+    <!-- Explicitly order the views while keeping Kanban as the initial view. -->
+    <record id="action_core_crm_pipeline_kanban" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_core_crm_lead_kanban"/>
+        <field name="act_window_id" ref="action_core_crm_pipeline"/>
+    </record>
+    <record id="action_core_crm_pipeline_list" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_core_crm_lead_list"/>
+        <field name="act_window_id" ref="action_core_crm_pipeline"/>
+    </record>
+    <record id="action_core_crm_pipeline_graph" model="ir.actions.act_window.view">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="view_core_crm_lead_graph"/>
+        <field name="act_window_id" ref="action_core_crm_pipeline"/>
+    </record>
+    <record id="action_core_crm_pipeline_pivot" model="ir.actions.act_window.view">
+        <field name="sequence" eval="4"/>
+        <field name="view_mode">pivot</field>
+        <field name="view_id" ref="view_core_crm_lead_pivot"/>
+        <field name="act_window_id" ref="action_core_crm_pipeline"/>
+    </record>
+    <!-- The form view is not part of the main pipeline view, but it is included here for completeness. -->
+    <record id="action_core_crm_pipeline_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="5"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_core_crm_lead_form"/>
+        <field name="act_window_id" ref="action_core_crm_pipeline"/>
+    </record>
+</odoo>

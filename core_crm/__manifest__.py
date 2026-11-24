@@ -8,7 +8,7 @@
     'author': "My Company",
 
     'category': 'Sales/CRM',
-    'version': '2.3',
+    'version': '2.9',
 
     'depends': ['base'],
 
@@ -17,6 +17,7 @@
         'security/ir.access.csv',
         'views/views.xml',
         'views/core_crm_tag_views.xml',
+        'views/pipeline.xml',
         'views/core_crm_menus.xml',
     ],
     'assets': {
