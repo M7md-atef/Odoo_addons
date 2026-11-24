@@ -1,60 +1,108 @@
 <odoo>
-  <data>
-    <!-- explicit list view definition -->
-<!--
-    <record model="ir.ui.view" id="core_crm.list">
-      <field name="name">core_crm list</field>
-      <field name="model">core_crm.core_crm</field>
-      <field name="arch" type="xml">
-        <list>
-          <field name="name"/>
-          <field name="value"/>
-          <field name="value2"/>
-        </list>
-      </field>
+    <record id="view_core_crm_lead_list" model="ir.ui.view">
+        <field name="name">core.crm.lead.list</field>
+        <field name="model">core.crm.lead</field>
+        <field name="arch" type="xml">
+            <!-- The list is the first screen users see when opening Leads. -->
+            <list>
+                <field name="title"/>
+                <field name="company"/>
+                <field name="name"/>
+                <field name="email_id"/>
+                <field name="phone_country_code" width="40px"/>
+                <field name="phone"/>
+                <field name="tag_ids" widget="lead_color_tags"/>
+                <field name="priority" widget="priority"/>
+                <field name="revenue" widget="monetary"/>
+                <field name="lead_owner"/>
+                <field name="state"/>
+            </list>
+        </field>
     </record>
--->
 
-    <!-- actions opening views on models -->
-<!--
-    <record model="ir.actions.act_window" id="core_crm.action_window">
-      <field name="name">core_crm window</field>
-      <field name="res_model">core_crm.core_crm</field>
-      <field name="view_mode">list,form</field>
+    <record id="view_core_crm_lead_form" model="ir.ui.view">
+        <field name="name">core.crm.lead.form</field>
+        <field name="model">core.crm.lead</field>
+        <field name="arch" type="xml">
+            <!-- The form is used to create a lead or edit all of its details. -->
+            <form string="Lead">
+                <sheet class="mx-auto">
+                    <group>
+                        <group>
+                            <field name="title" string="Lead Title *" required="1" placeholder="e.g. Website inquiry"/>
+                            <field name="nickname" placeholder="Choose a nickname"/>
+                            <field name="name" string="Name *" required="1" placeholder="e.g. Ahmed Ali"/>
+                            <field name="gender" placeholder="Choose a gender"/>
+                            <field name="tag_ids" widget="lead_color_tags" class="o_lead_tags_select"/>
+                        </group>
+                        <group>
+                            <field name="lead_owner"/>
+                            <field name="state" string="Status *"/>
+                            <field name="company" placeholder="Type a company name"/>
+                            <field name="priority" widget="priority"/>
+                            <field name="revenue" widget="monetary"/>
+                            <field name="currency_id" domain="[('name', '=', 'EGP')]" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Contact Info">
+                        <group>
+                            <field name="phone_country_id" placeholder="Choose a phone country"/>
+                            <field name="phone_country_code"/>
+                            <field name="phone" string="Phone *" widget="phone" required="1" placeholder="e.g. 012 345 6789"/>
+                            <field name="phone_ext" widget="phone" placeholder="e.g. 012 345 6789"/>
+                        </group>
+                        <group>
+                            <field name="whatsapp_no" widget="phone" placeholder="e.g. 012 345 6789"/>
+                            <field name="email_id" widget="email" placeholder="e.g. name@example.com"/>
+                            <field name="website" widget="url" placeholder="e.g. https://example.com"/>
+
+                        </group>
+                    </group>
+
+                    <group string="Address">
+                        <group>
+                            <field name="building_no" placeholder="e.g. 4B"/>
+                            <field name="street_no" placeholder="e.g. 12"/>
+                            <field name="district" placeholder="e.g. Downtown"/>
+                            <field name="city" placeholder="e.g. Cairo"/>
+                        </group>
+                        <group>
+                            <field name="state_id" placeholder="Type a state or province" domain="[('country_id', '=?', country)]"/>
+                            <field name="country" placeholder="Type a country name"/>
+                            <field name="country_flag" widget="image_url" options="{'size': [100,50]}" nolabel="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Additional Information">
+                        <group>
+                            <field name="job" placeholder="e.g. Sales Manager"/>
+                            <field name="language" placeholder="Search active languages"/>
+                            <field name="date_of_birth" placeholder="Select date of birth"/>
+                            <field name="age" invisible="not date_of_birth"/>
+                        </group>
+                        <group>
+                            <field name="marital_status" placeholder="Choose marital status"/>
+                            <field name="disabled"/>
+                            <field name="unsubscribed"/>
+                            <field name="blog_subscriber"/>
+                        </group>
+                    </group>
+
+                    <group string="Notes">
+                        <field name="description" placeholder="Add notes about this lead..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
     </record>
--->
 
-    <!-- server action to the one above -->
-<!--
-    <record model="ir.actions.server" id="core_crm.action_server">
-      <field name="name">core_crm server</field>
-      <field name="model_id" ref="model_core_crm_core_crm"/>
-      <field name="state">code</field>
-      <field name="code">
-        action = {
-          "type": "ir.actions.act_window",
-          "view_mode": "list,form",
-          "res_model": model._name,
-        }
-      </field>
+
+    <!-- This action connects the menu to the lead list and form views. -->
+    <record id="action_core_crm_leads" model="ir.actions.act_window">
+        <field name="name">Leads</field>
+        <field name="res_model">core.crm.lead</field>
+        <field name="view_mode">list,form</field>
     </record>
--->
 
-    <!-- Top menu item -->
-<!--
-    <menuitem name="core_crm" id="core_crm.menu_root"/>
--->
-    <!-- menu categories -->
-<!--
-    <menuitem name="Menu 1" id="core_crm.menu_1" parent="core_crm.menu_root"/>
-    <menuitem name="Menu 2" id="core_crm.menu_2" parent="core_crm.menu_root"/>
--->
-    <!-- actions -->
-<!--
-    <menuitem name="List" id="core_crm.menu_1_list" parent="core_crm.menu_1"
-              action="core_crm.action_window"/>
-    <menuitem name="Server to list" id="core_crm" parent="core_crm.menu_2"
-              action="core_crm.action_server"/>
--->
-  </data>
 </odoo>
