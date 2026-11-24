@@ -1,4 +1,5 @@
 <odoo>
+    <!-- The list and form views for the Lead Tag model are used to manage tags that can be assigned to leads. -->
     <record id="view_core_crm_tag_list" model="ir.ui.view">
         <field name="name">core.crm.tag.list</field>
         <field name="model">core.crm.tag</field>
@@ -10,6 +11,7 @@
         </field>
     </record>
 
+    <!-- The form view for the Lead Tag model allows users to create or edit tags, including setting their name and color. -->
     <record id="view_core_crm_tag_form" model="ir.ui.view">
         <field name="name">core.crm.tag.form</field>
         <field name="model">core.crm.tag</field>
@@ -25,6 +27,7 @@
         </field>
     </record>
 
+    <!-- The action to open the Lead Tag management interface, allowing users to view and manage tags in a list or form view. -->
     <record id="action_core_crm_tags" model="ir.actions.act_window">
         <field name="name">Lead Tags</field>
         <field name="res_model">core.crm.tag</field>
