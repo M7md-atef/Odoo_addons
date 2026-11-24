@@ -1,5 +1,5 @@
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 
 class CrmTag(models.Model):
@@ -19,6 +19,30 @@ class CrmTag(models.Model):
     _sql_constraints = [
         ("name_unique", "unique(name)", "Tag names must be unique."),
     ]
+
+
+class CrmLeadStage(models.Model):
+    _name = "core.crm.stage"
+    _description = "CRM Lead Stage"
+    _order = "sequence, id"
+
+    name = fields.Char(
+        string="Stage Name",
+        required=True,
+    )
+    sequence = fields.Integer(
+        default=10,
+        index=True,
+    )
+    fold = fields.Boolean(
+        string="Folded in Pipeline",
+        default=False,
+    )
+
+    def unlink(self):
+        if self.env["core.crm.lead"].search_count([("stage_id", "in", self.ids)]):
+            raise UserError("Move all leads out of a stage before deleting it.")
+        return super().unlink()
 
 
 class CrmLead(models.Model):
@@ -125,21 +149,21 @@ class CrmLead(models.Model):
         help="The contact's marital status.",
     )
 
-    # Keep the existing status field name to preserve current lead data.
     phone = fields.Char(
         string="Phone",
         help="The contact's main phone number.",
     )
-    state = fields.Selection(
-        [
-            ("new", "New"),
-            ("qualified", "Qualified"),
-            ("lost", "Lost"),
-        ],
-        string="Status",
-        default="new",
-        required=True,
-        help="The current progress of this lead.",
+    stage_id = fields.Many2one(
+        "core.crm.stage",
+        string="Stage",
+        default=lambda self: self.env.ref(
+            "core_crm.core_crm_stage_new",
+            raise_if_not_found=False,
+        ),
+        group_expand="_read_group_stage_ids",
+        ondelete="restrict",
+        index=True,
+        help="The lead's current pipeline stage.",
     )
     email = fields.Char(
         string="Email",
@@ -195,7 +219,6 @@ class CrmLead(models.Model):
         string="Building No.",
         help="The building number for the contact's address.",
     )
-    # State/Province uses state_id because state already represents the lead Status.
     state_id = fields.Many2one(
         "res.country.state",
         string="State/Province",
@@ -282,6 +305,10 @@ class CrmLead(models.Model):
             if not vals.get("currency_id") and egp:
                 vals["currency_id"] = egp.id
         return super().create(vals_list)
+
+    @api.model
+    def _read_group_stage_ids(self, stages, domain):
+        return self.env["core.crm.stage"].search([], order="sequence, id")
 
     @api.depends("date_of_birth")
     def _compute_age(self):
