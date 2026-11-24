@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="core_crm.LeadTagList">
+        <div class="o_core_crm_tag_picker position-relative d-inline-flex flex-wrap gap-1">
+            <t t-foreach="this.tags" t-as="tag" t-key="tag.id">
+                <span
+                    class="badge rounded-pill px-2 o_core_crm_tag_badge"
+                    t-att-style="`background-color: ${tag.data.color || '#FC5130'}; color: #FFFFFF;`"
+                    t-out="tag.data.name or tag.data.display_name"
+                />
+            </t>
+            <button
+                t-if="!this.props.readonly"
+                type="button"
+                class="btn btn-sm btn-link px-1 py-0"
+                t-on-click.stop="this.toggleMenu"
+            >
+                <i class="oi oi-plus"/>
+            </button>
+            <div t-if="this.state.open" class="o_core_crm_tag_menu">
+                <t t-foreach="this.state.available" t-as="tag" t-key="tag.id">
+                    <button
+                        type="button"
+                        class="o_core_crm_tag_option"
+                        t-on-click.stop.prevent="() => this.toggleTag(tag)"
+                    >
+                        <span
+                            class="o_core_crm_tag_dot"
+                            t-att-style="`background-color: ${tag.color || '#FC5130'};`"
+                        />
+                        <span t-out="tag.name"/>
+                        <i t-if="this.isSelected(tag)" class="oi oi-check ms-auto"/>
+                    </button>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

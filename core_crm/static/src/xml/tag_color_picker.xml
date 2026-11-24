@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="core_crm.TagColorPicker">
+        <div class="o_tag_color_picker d-flex align-items-center gap-2">
+            <input
+                type="color"
+                class="o_tag_color_swatch"
+                t-att-value="this.color"
+                t-att-disabled="this.props.readonly"
+                t-on-input.stop="this.onColorChange"
+            />
+            <input
+                type="text"
+                class="o_input o_tag_color_hex"
+                t-att-value="this.color"
+                t-att-readonly="this.props.readonly"
+                maxlength="7"
+                t-on-change.stop="this.onHexInput"
+            />
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,99 @@
+.o_tag_color_swatch {
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.o_tag_color_swatch::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.o_tag_color_swatch::-webkit-color-swatch {
+    border: 0;
+    border-radius: 50%;
+}
+
+.o_tag_color_swatch::-moz-color-swatch {
+    border: 0;
+    border-radius: 50%;
+}
+
+.o_tag_color_hex {
+    width: 110px;
+    text-transform: uppercase;
+}
+
+.o_core_crm_tag_badge,
+.o_core_crm_tag_option,
+.o_core_crm_tag_dot {
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.o_core_crm_tag_menu {
+    position: absolute;
+    z-index: 1000;
+    top: calc(100% + 4px);
+    left: 0;
+    min-width: 180px;
+    padding: 6px;
+    border: 1px solid var(--o-input-border-color);
+    border-radius: 6px;
+    background: var(--o-view-background-color);
+    box-shadow: var(--o-shadow-2);
+}
+
+.o_core_crm_tag_option {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 8px;
+    padding: 6px 8px;
+    border: 0;
+    background: transparent;
+    color: var(--o-main-text-color);
+    text-align: left;
+}
+
+.o_core_crm_tag_option:hover {
+    background: var(--o-hover-background-color);
+}
+
+.o_core_crm_tag_dot {
+    width: 10px;
+    height: 10px;
+    flex: 0 0 10px;
+    border-radius: 50%;
+}
+
+.o_lead_tags_select .o_field_tags,
+.o_field_tags.o_lead_tags_select {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 2rem;
+    padding: 2px 0;
+    border-bottom: 1px solid var(--o-input-border-color);
+}
+
+.o_lead_tags_select .o_field_tags:focus-within,
+.o_field_tags.o_lead_tags_select:focus-within {
+    border-bottom-color: var(--o-brand-primary);
+}
+
+.o_lead_tags_select .o_field_many2many_selection {
+    width: auto !important;
+    min-width: 2rem;
+    flex: 1 1 2rem;
+}
+
+.o_lead_tags_select .o_field_many2many_selection input {
+    border: 0 !important;
+    background: transparent !important;
+}
