@@ -14,6 +14,7 @@
                 <field name="revenue" widget="monetary"/>
                 <field name="lead_owner"/>
                 <field name="stage_id"/>
+                <field name="lost_reason_id" optional="hide"/>
             </list>
         </field>
     </record>
@@ -36,6 +37,7 @@
                         <group>
                             <field name="lead_owner"/>
                             <field name="stage_id" string="Stage *" required="1"/>
+                            <field name="lost_reason_id" placeholder="Required for lost leads"/>
                             <field name="priority" widget="priority"/>
                             <field name="revenue" widget="monetary"/>
                             <field name="currency_id" domain="[('name', '=', 'EGP')]" readonly="1"/>

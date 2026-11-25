@@ -38,11 +38,31 @@ class CrmLeadStage(models.Model):
         string="Folded in Pipeline",
         default=False,
     )
+    is_lost = fields.Boolean(
+        string="Lost Stage",
+        default=False,
+        help="Leads in this stage need a lost reason.",
+    )
 
     def unlink(self):
         if self.env["core.crm.lead"].search_count([("stage_id", "in", self.ids)]):
             raise UserError("Move all leads out of a stage before deleting it.")
         return super().unlink()
+
+
+class CrmLeadLostReason(models.Model):
+    _name = "core.crm.lost.reason"
+    _description = "CRM Lead Lost Reason"
+    _order = "sequence, name"
+
+    name = fields.Char(
+        string="Reason",
+        required=True,
+    )
+    sequence = fields.Integer(
+        default=10,
+        index=True,
+    )
 
 
 class CrmLead(models.Model):
@@ -164,6 +184,13 @@ class CrmLead(models.Model):
         ondelete="restrict",
         index=True,
         help="The lead's current pipeline stage.",
+    )
+    lost_reason_id = fields.Many2one(
+        "core.crm.lost.reason",
+        string="Lost Reason",
+        ondelete="restrict",
+        index=True,
+        help="Required when the lead is in the Lost stage.",
     )
     email = fields.Char(
         string="Email",
@@ -301,10 +328,43 @@ class CrmLead(models.Model):
             [("name", "=", "EGP")],
             limit=1,
         )
+        lost_stage_ids = set(
+            self.env["core.crm.stage"].search([("is_lost", "=", True)]).ids
+        )
+        default_stage_id = self.default_get(["stage_id"]).get("stage_id")
         for vals in vals_list:
             if not vals.get("currency_id") and egp:
                 vals["currency_id"] = egp.id
+            stage_id = vals.get("stage_id", default_stage_id)
+            if stage_id in lost_stage_ids and not vals.get("lost_reason_id"):
+                raise ValidationError(
+                    "Select a lost reason before creating a lead in a Lost stage."
+                )
         return super().create(vals_list)
+
+    def write(self, vals):
+        if "stage_id" not in vals:
+            return super().write(vals)
+
+        target_stage = (
+            self.env["core.crm.stage"].browse(vals["stage_id"])
+            if vals["stage_id"]
+            else self.env["core.crm.stage"]
+        )
+        if target_stage and target_stage.is_lost:
+            return super().write(vals)
+
+        leaving_lost = self.filtered(lambda lead: lead.stage_id.is_lost)
+        if not leaving_lost:
+            return super().write(vals)
+
+        remaining = self - leaving_lost
+        result = super(CrmLead, leaving_lost).write(
+            {**vals, "lost_reason_id": False}
+        )
+        if remaining:
+            result = super(CrmLead, remaining).write(vals)
+        return result
 
     @api.model
     def _read_group_stage_ids(self, stages, domain):
@@ -328,9 +388,52 @@ class CrmLead(models.Model):
         if any(lead.date_of_birth and lead.date_of_birth > today for lead in self):
             raise ValidationError("Date of Birth cannot be in the future.")
 
+    @api.constrains("stage_id", "lost_reason_id")
+    def _check_lost_reason(self):
+        for lead in self:
+            if lead.stage_id.is_lost and not lead.lost_reason_id:
+                raise ValidationError(
+                    "Select a lost reason before moving a lead to a Lost stage."
+                )
+
     @api.depends("phone_country_id.phone_code")
     def _compute_phone_country_code(self):
         for lead in self:
             phone_code = lead.phone_country_id.phone_code
             lead.phone_country_code = f"+{phone_code}" if phone_code else False
+
+
+class CrmLeadLostWizard(models.TransientModel):
+    _name = "core.crm.lead.lost"
+    _description = "Select a Lost Reason"
+
+    lead_ids = fields.Many2many(
+        "core.crm.lead",
+        string="Leads",
+        required=True,
+    )
+    stage_id = fields.Many2one(
+        "core.crm.stage",
+        string="Lost Stage",
+        required=True,
+        readonly=True,
+        ondelete="restrict",
+    )
+    lost_reason_id = fields.Many2one(
+        "core.crm.lost.reason",
+        string="Lost Reason",
+        required=True,
+    )
+
+    def action_mark_lost(self):
+        self.ensure_one()
+        if not self.stage_id.is_lost:
+            raise ValidationError("Choose a stage marked as Lost.")
+        self.lead_ids.write(
+            {
+                "stage_id": self.stage_id.id,
+                "lost_reason_id": self.lost_reason_id.id,
+            }
+        )
+        return {"type": "ir.actions.act_window_close"}
 

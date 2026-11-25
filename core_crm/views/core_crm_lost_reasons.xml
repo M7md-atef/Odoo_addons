@@ -1,0 +1,68 @@
+<odoo>
+    <data noupdate="1">
+        <record id="core_crm_lost_reason_too_expensive" model="core.crm.lost.reason">
+            <field name="name">Too expensive</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="core_crm_lost_reason_no_people_or_skills" model="core.crm.lost.reason">
+            <field name="name">We don't have people/skills</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="core_crm_lost_reason_not_enough_stock" model="core.crm.lost.reason">
+            <field name="name">Not enough stock</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="core_crm_lost_reason_price_unsuitable" model="core.crm.lost.reason">
+            <field name="name">The prices offered to the customer are not suitable</field>
+            <field name="sequence">40</field>
+        </record>
+        <record id="core_crm_lost_reason_product_unsuitable" model="core.crm.lost.reason">
+            <field name="name">The product is not suitable for the customer</field>
+            <field name="sequence">50</field>
+        </record>
+    </data>
+
+    <record id="view_core_crm_lost_reason_list" model="ir.ui.view">
+        <field name="name">core.crm.lost.reason.list</field>
+        <field name="model">core.crm.lost.reason</field>
+        <field name="arch" type="xml">
+            <list string="Lost Reasons" create="true" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_core_crm_lost_reasons" model="ir.actions.act_window">
+        <field name="name">Lost Reasons</field>
+        <field name="res_model">core.crm.lost.reason</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_core_crm_lost_reason_list"/>
+    </record>
+
+    <record id="view_core_crm_lead_lost_wizard_form" model="ir.ui.view">
+        <field name="name">core.crm.lead.lost.form</field>
+        <field name="model">core.crm.lead.lost</field>
+        <field name="arch" type="xml">
+            <form string="Mark Lead as Lost">
+                <field name="lead_ids" invisible="1"/>
+                <field name="stage_id" invisible="1"/>
+                <group>
+                    <field name="lost_reason_id" placeholder="Select a lost reason..."/>
+                </group>
+                <footer>
+                    <button name="action_mark_lost" string="Mark as Lost" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_core_crm_lead_lost_wizard" model="ir.actions.act_window">
+        <field name="name">Select a Lost Reason</field>
+        <field name="res_model">core.crm.lead.lost</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_core_crm_lead_lost_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

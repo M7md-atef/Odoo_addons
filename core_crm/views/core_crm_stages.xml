@@ -7,6 +7,7 @@
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="fold"/>
+                <field name="is_lost"/>
             </list>
         </field>
     </record>

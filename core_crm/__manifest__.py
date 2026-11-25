@@ -8,7 +8,7 @@
     'author': "My Company",
 
     'category': 'Sales/CRM',
-    'version': '3.0',
+    'version': '3.2',
 
     'depends': ['base'],
 
@@ -19,6 +19,7 @@
         'views/core_crm_tags.xml',
         'views/core_crm_pipeline.xml',
         'views/core_crm_stages.xml',
+        'views/core_crm_lost_reasons.xml',
         'views/core_crm_menu.xml',
     ],
     'assets': {
@@ -27,6 +28,7 @@
             'core_crm/static/src/js/tag_color_picker.js',
             'core_crm/static/src/js/lead_tag_list.js',
             'core_crm/static/src/js/lead_color_tags.js',
+            'core_crm/static/src/js/lost_reason_kanban.js',
             'core_crm/static/src/xml/tag_color_picker.xml',
             'core_crm/static/src/xml/lead_tag_list.xml',
             'core_crm/static/src/xml/lead_color_tags.xml',

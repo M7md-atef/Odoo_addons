@@ -12,6 +12,7 @@
         <record id="core_crm_stage_lost" model="core.crm.stage">
             <field name="name">Lost</field>
             <field name="sequence">30</field>
+            <field name="is_lost">True</field>
         </record>
     </data>
 
@@ -20,7 +21,7 @@
         <field name="name">core.crm.lead.kanban</field>
         <field name="model">core.crm.lead</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="stage_id" class="o_kanban_small_column" group_create="true" group_edit="true" group_delete="true" fold_field="fold">
+            <kanban js_class="core_crm_lost_reason_kanban" default_group_by="stage_id" class="o_kanban_small_column" group_create="true" group_edit="true" group_delete="true" fold_field="fold">
                 <field name="title"/>
                 <field name="stage_id"/>
                 <field name="phone"/>
@@ -112,6 +113,7 @@
         <field name="arch" type="xml">
             <pivot string="Pipeline Analysis">
                 <field name="stage_id" type="row"/>
+                <field name="lost_reason_id"/>
                 <field name="lead_owner" type="col"/>
                 <field name="revenue" type="measure"/>
             </pivot>
@@ -125,6 +127,7 @@
         <field name="arch" type="xml">
             <graph string="Pipeline Revenue" type="bar">
                 <field name="stage_id"/>
+                <field name="lost_reason_id"/>
                 <field name="revenue" type="measure"/>
             </graph>
         </field>

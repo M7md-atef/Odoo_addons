@@ -2,3 +2,5 @@ id,name,model_id:id,group_id:id,operation,domain
 access_core_crm_lead,core.crm.lead,model_core_crm_lead,base.group_user,crud,
 access_core_crm_tag,core.crm.tag,model_core_crm_tag,base.group_user,crud,
 access_core_crm_stage,core.crm.stage,model_core_crm_stage,base.group_user,crud,
+access_core_crm_lost_reason,core.crm.lost.reason,model_core_crm_lost_reason,base.group_user,crud,
+access_core_crm_lead_lost_wizard,core.crm.lead.lost,model_core_crm_lead_lost,base.group_user,crud,
