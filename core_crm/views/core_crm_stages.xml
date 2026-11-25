@@ -1,0 +1,20 @@
+<odoo>
+    <record id="view_core_crm_stage_list" model="ir.ui.view">
+        <field name="name">core.crm.stage.list</field>
+        <field name="model">core.crm.stage</field>
+        <field name="arch" type="xml">
+            <list string="Pipeline Stages" create="true" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="fold"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_core_crm_stages" model="ir.actions.act_window">
+        <field name="name">Stages</field>
+        <field name="res_model">core.crm.stage</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_core_crm_stage_list"/>
+    </record>
+</odoo>

@@ -8,7 +8,7 @@
     'author': "My Company",
 
     'category': 'Sales/CRM',
-    'version': '2.9',
+    'version': '3.0',
 
     'depends': ['base'],
 
@@ -18,6 +18,7 @@
         'views/core_crm_leads.xml',
         'views/core_crm_tags.xml',
         'views/core_crm_pipeline.xml',
+        'views/core_crm_stages.xml',
         'views/core_crm_menu.xml',
     ],
     'assets': {
