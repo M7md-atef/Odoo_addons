@@ -16,7 +16,7 @@
         # Odoo 20 stores model access rules in ir.access.csv.
         'security/ir.access.csv',
         'views/views.xml',
-        'views/core_crm_tag_views.xml',
+        'views/core_crm_tag.xml',
         'views/core_crm_pipeline.xml',
         'views/core_crm_menus.xml',
     ],
