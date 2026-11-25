@@ -17,7 +17,7 @@
         'security/ir.access.csv',
         'views/views.xml',
         'views/core_crm_tag_views.xml',
-        'views/pipeline.xml',
+        'views/core_crm_pipeline.xml',
         'views/core_crm_menus.xml',
     ],
     'assets': {
