@@ -18,7 +18,7 @@
         'views/views.xml',
         'views/core_crm_tag.xml',
         'views/core_crm_pipeline.xml',
-        'views/core_crm_menus.xml',
+        'views/core_crm_menu.xml',
     ],
     'assets': {
         'web.assets_backend': [
