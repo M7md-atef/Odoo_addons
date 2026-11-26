@@ -7,12 +7,12 @@
             <list>
                 <field name="title"/>
                 <field name="name"/>
-                <field name="email_id"/>
-                <field name="phone"/>
-                <field name="tag_ids" widget="lead_color_tags"/>
-                <field name="priority" widget="priority"/>
+                <field name="email_id" optional="show"/>
+                <field name="phone" optional="show"/>
+                <field name="tag_ids" widget="lead_color_tags" optional="show"/>
+                <field name="priority" widget="priority" optional="show"/>
                 <field name="revenue" widget="monetary"/>
-                <field name="lead_owner"/>
+                <field name="lead_owner" optional="show"/>
                 <field name="stage_id"/>
                 <field name="lost_reason_id" optional="hide"/>
             </list>
