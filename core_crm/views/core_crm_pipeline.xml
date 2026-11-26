@@ -34,7 +34,7 @@
                 <field name="whatsapp_no"/>
                 <field name="website"/>
                 <!-- Show each stage's total revenue in its header. -->
-                <progressbar field="priority" colors='{"0": "primary", "1": "primary", "2": "primary", "3": "primary", "4": "primary", "5": "primary"}' sum_field="revenue"/>
+                <progressbar field="priority" colors='{"0": "secondary", "1": "info", "2": "primary", "3": "success", "4": "warning", "5": "danger"}' sum_field="revenue"/>
                 <templates>
                     <t t-name="card">
                         <!-- Contact links are shown only when the lead has matching details. -->
