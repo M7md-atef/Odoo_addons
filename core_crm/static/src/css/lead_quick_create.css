@@ -1,0 +1,16 @@
+.o_form_view.o_kanban_quick_create_form .o_inner_group.o_core_crm_lead_quick_create {
+    grid-template-columns: minmax(4.5rem, max-content) minmax(0, 1fr);
+    column-gap: 0.5rem;
+    row-gap: 0.25rem;
+    padding-bottom: 0.5rem;
+}
+
+.o_form_view.o_kanban_quick_create_form .o_inner_group.o_core_crm_lead_quick_create .o_wrap_label {
+    align-self: center;
+    min-width: 0;
+    white-space: nowrap;
+}
+
+.o_form_view.o_kanban_quick_create_form .o_inner_group.o_core_crm_lead_quick_create .o_wrap_input {
+    min-width: 0;
+}

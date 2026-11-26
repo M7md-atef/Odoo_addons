@@ -17,11 +17,28 @@
     </data>
 
     <!-- Leads are grouped by stage;the stage's fold field controls collapsed columns. -->
+    <record id="view_core_crm_lead_quick_create" model="ir.ui.view">
+        <field name="name">core.crm.lead.quick.create</field>
+        <field name="model">core.crm.lead</field>
+        <field name="arch" type="xml">
+            <form>
+                <group class="o_core_crm_lead_quick_create">
+                    <field name="title" placeholder="Title" required="1"/>
+                    <field name="name" required="1"/>
+                    <field name="phone" widget="phone" required="1"/>
+                    <field name="revenue" widget="monetary" required="1"/>
+                    <field name="currency_id" invisible="True"/>
+                    <field name="priority" widget="priority" required="1" class="mb-2"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
     <record id="view_core_crm_lead_kanban" model="ir.ui.view">
         <field name="name">core.crm.lead.kanban</field>
         <field name="model">core.crm.lead</field>
         <field name="arch" type="xml">
-            <kanban js_class="core_crm_lost_reason_kanban" default_group_by="stage_id" class="o_kanban_small_column" group_create="true" group_edit="true" group_delete="true" fold_field="fold">
+            <kanban js_class="core_crm_lost_reason_kanban" default_group_by="stage_id" class="o_kanban_small_column o_core_crm_pipeline" group_create="true" group_edit="true" group_delete="true" fold_field="fold" quick_create_view="core_crm.view_core_crm_lead_quick_create">
                 <field name="title"/>
                 <field name="stage_id"/>
                 <field name="phone"/>
@@ -36,6 +53,14 @@
                 <!-- Show each stage's total revenue in its header. -->
                 <progressbar field="priority" colors='{"0": "secondary", "1": "info", "2": "primary", "3": "success", "4": "warning", "5": "danger"}' sum_field="revenue"/>
                 <templates>
+                    <t t-name="menu">
+                        <t t-if="widget.editable">
+                            <a role="menuitem" type="open" class="dropdown-item"><i class="oi oi-fw oi-filled me-1" data-icon="edit" aria-hidden="true"/>Edit</a>
+                        </t>
+                        <t t-if="widget.deletable">
+                            <a role="menuitem" type="delete" class="dropdown-item text-danger"><i class="oi oi-fw oi-filled me-1" data-icon="delete" aria-hidden="true"/>Delete</a>
+                        </t>
+                    </t>
                     <t t-name="card">
                         <!-- Contact links are shown only when the lead has matching details. -->
                         <div class="oe_kanban_card">

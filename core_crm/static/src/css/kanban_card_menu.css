@@ -1,0 +1,19 @@
+.o_core_crm_pipeline .o_kanban_renderer .o_kanban_record .o_dropdown_kanban {
+    visibility: visible !important;
+}
+
+.o_core_crm_pipeline .o_kanban_renderer .o_kanban_record .o_dropdown_kanban .btn {
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.o_core_crm_pipeline .o_kanban_renderer .o_kanban_record .o_dropdown_kanban .btn:hover,
+.o_core_crm_pipeline .o_kanban_renderer .o_kanban_record .o_dropdown_kanban .btn:focus-visible {
+    background-color: #e9ecef;
+    border-color: #e9ecef;
+}

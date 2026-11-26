@@ -25,6 +25,8 @@
     'assets': {
         'web.assets_backend': [
             'core_crm/static/src/css/tag_color.css',
+            'core_crm/static/src/css/lead_quick_create.css',
+            'core_crm/static/src/css/kanban_card_menu.css',
             'core_crm/static/src/js/tag_color_picker.js',
             'core_crm/static/src/js/lead_tag_list.js',
             'core_crm/static/src/js/lead_color_tags.js',
